@@ -20,15 +20,19 @@ public class Storage {
         }
         System.out.println("There is no space available");
     }
-    public String rentBook (Book book){
+    public static String rentBook (Book book) throws NotInStockException {
         for (int i = 0; i < books.length; i++) {
             if (books[i].name.equals(book.name)){
-                inStock[i] -= 1;
-                return book.name;
+                if (inStock[i] > 0) {
+                    inStock[i] -= 1;
+                    return book.name;
+                } else if (inStock[i] == 0){
+                    throw new NotInStockException(book);
+                }
             }
         } return null;
     }
-    public void returnBook(Book book){
+    public static void returnBook(Book book){
         for (int i = 0; i < books.length; i++) {
             if (books[i].name.equals(book.name)){
                 inStock[i]++;
@@ -37,7 +41,7 @@ public class Storage {
         }
     }
 
-    public int getInStock(Book book) {
+    public static int getInStock(Book book) {
         for (int i = 0; i < books.length; i++) {
             if (books[i].name.equals(book.name)){
                 return inStock[i];
@@ -65,9 +69,11 @@ public class Storage {
             System.out.println(books[i].toString());
         }
     }
-    public void bestPrint(){
+    public static void bestPrint(){
         for (int i = 0; i < books.length; i++) {
-            if (books[i] == BestSeller )
+            if (books[i] instanceof BestSeller ){
+                System.out.println(books[i]);
+            }
         }
     }
 }
